@@ -13,7 +13,20 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Tooltip,
+  TooltipProps,
+  tooltipClasses,
+  styled,
 } from "@mui/material";
+
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: 500,
+    fontSize: 14,
+  },
+});
 
 // Функция для определения цвета фона строки
 const getRowBackgroundColor = (layer: string) => {
@@ -34,87 +47,100 @@ export const RoomTable: React.FC = () => {
 
   const planning_type_floor = roomData?.planning_type_floor
     ?.map((el) => {
+      const volumes = roomData?.floor_volumes.find(
+        (volume) => volume.floor_type.id === el.floor_type.id
+      );
       return [
         {
           construct: "Полы",
           layer: "Черновой",
           finishType: el.floor_type.type_code,
+          descriptionFinishType: el.floor_type.description,
           material: el.floor_type.rough_finish,
           unit: "м2",
           totalVolume: el.area_rough,
-          completedVolume: (roomData) =>
-            roomData.find(
-              (el) => el.floor_type.id === roomData.floor_volumes.id
-            ).rough_volume,
-          remaining: 5,
-          completionPercentage: "0%",
+          completedVolume: volumes?.rough_volume || 0,
+          remaining: volumes?.remaining_rough || 0,
+          completionPercentage: volumes?.rough_completion_percentage || 0,
         },
         {
           construct: "Полы",
           layer: "Чистовой",
           finishType: el.floor_type.type_code,
+          descriptionFinishType: el.floor_type.description,
           material: el.floor_type.clean_finish,
           unit: "м2",
           totalVolume: el.area_clean,
-          completedVolume: 0,
-          remaining: 5,
-          completionPercentage: "0%",
+          completedVolume: volumes?.clean_volume || 0,
+          remaining: volumes?.remaining_clean || 0,
+          completionPercentage: volumes?.clean_completion_percentage || 0,
         },
       ];
     })
     .flat();
   const planning_type_ceiling = roomData?.planning_type_ceiling
     ?.map((el) => {
+      const volumes = roomData?.ceiling_volumes.find(
+        (volume) => volume.ceiling_type.id === el.ceiling_type.id
+      );
       return [
         {
           construct: "Потолок",
           layer: "Черновой",
           finishType: el.ceiling_type.type_code,
+          descriptionFinishType: el.ceiling_type.description,
           material: el.ceiling_type.rough_finish,
           unit: "м2",
           totalVolume: el.area_rough,
-          completedVolume: 0,
-          remaining: 5,
-          completionPercentage: "0%",
+          completedVolume: volumes?.rough_volume || 0,
+          remaining: volumes?.remaining_rough || 0,
+          completionPercentage: volumes?.rough_completion_percentage || 0,
         },
         {
           construct: "Потолок",
           layer: "Чистовой",
           finishType: el.ceiling_type.type_code,
+          descriptionFinishType: el.ceiling_type.description,
           material: el.ceiling_type.clean_finish,
           unit: "м2",
           totalVolume: el.area_clean,
-          completedVolume: 0,
-          remaining: 5,
-          completionPercentage: "0%",
+          completedVolume: volumes?.clean_volume || 0,
+          remaining: volumes?.remaining_clean || 0,
+          completionPercentage: volumes?.clean_completion_percentage || 0,
         },
       ];
     })
     .flat();
+
   const planning_type_wall = roomData?.planning_type_wall
     ?.map((el) => {
+      const volumes = roomData?.wall_volumes.find(
+        (volume) => volume.wall_type.id === el.wall_type.id
+      );
       return [
         {
           construct: "Стены",
           layer: "Черновой",
           finishType: el.wall_type.type_code,
+          descriptionFinishType: el.wall_type.description,
           material: el.wall_type.rough_finish,
           unit: "м2",
           totalVolume: el.area_rough,
-          completedVolume: 0,
-          remaining: 5,
-          completionPercentage: "0%",
+          completedVolume: volumes?.rough_volume || 0,
+          remaining: volumes?.remaining_rough || 0,
+          completionPercentage: volumes?.rough_completion_percentage || 0,
         },
         {
           construct: "Стены",
           layer: "Чистовой",
           finishType: el.wall_type.type_code,
+          descriptionFinishType: el.wall_type.description,
           material: el.wall_type.clean_finish,
           unit: "м2",
           totalVolume: el.area_clean,
-          completedVolume: 0,
-          remaining: 5,
-          completionPercentage: "0%",
+          completedVolume: volumes?.clean_volume || 0,
+          remaining: volumes?.remaining_clean || 0,
+          completionPercentage: volumes?.clean_completion_percentage || 0,
         },
       ];
     })
@@ -153,7 +179,11 @@ export const RoomTable: React.FC = () => {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      elevation={3}
+      component={Paper}
+      sx={{ width: 1200, margin: "auto" }}
+    >
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -221,7 +251,10 @@ export const RoomTable: React.FC = () => {
                     <TableCell rowSpan={group.length}>{layer}</TableCell>
                   ) : null}
                   {/* Остальные ячейки */}
-                  <TableCell>{row.finishType}</TableCell>
+
+                  <CustomWidthTooltip title={row.descriptionFinishType}>
+                    <TableCell>{row.finishType}</TableCell>
+                  </CustomWidthTooltip>
                   <TableCell>{row.material}</TableCell>
                   <TableCell>{row.unit}</TableCell>
                   <TableCell>{row.totalVolume}</TableCell>
