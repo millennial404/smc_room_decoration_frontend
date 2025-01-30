@@ -15,129 +15,6 @@ import {
   Paper,
 } from "@mui/material";
 
-const rows = [
-  {
-    construct: "Полы",
-    layer: "Черновой",
-    finishType: "2,3",
-    material: "Стяжка",
-    unit: "м2",
-    totalVolume: 10.9,
-    completedVolume: 8.72,
-    remaining: 2.18,
-    completionPercentage: "80%",
-  },
-  {
-    construct: "Полы",
-    layer: "Чистовой",
-    finishType: "2,3",
-    material: "Полимерное покрытие",
-    unit: "м2",
-    totalVolume: 10.9,
-    completedVolume: 0,
-    remaining: 10.9,
-    completionPercentage: "0%",
-  },
-  {
-    construct: "Потолок",
-    layer: "Черновой",
-    finishType: "П1",
-    material: "Ключевой объем №1",
-    unit: "м2",
-    totalVolume: 7,
-    completedVolume: 7,
-    remaining: 0,
-    completionPercentage: "100%",
-  },
-  {
-    construct: "Потолок",
-    layer: "Чистовой",
-    finishType: "П1",
-    material: "Ключевой объем №2",
-    unit: "м2",
-    totalVolume: 7,
-    completedVolume: 0,
-    remaining: 7,
-    completionPercentage: "0%",
-  },
-  {
-    construct: "Потолок",
-    layer: "Чистовой",
-    finishType: "П2",
-    material: "Ключевой объем №2",
-    unit: "м2",
-    totalVolume: 5,
-    completedVolume: 0,
-    remaining: 5,
-    completionPercentage: "0%",
-  },
-  {
-    construct: "Стены",
-    layer: "Черновой",
-    finishType: "С-4.С",
-    material: "Штукатурка",
-    unit: "м2",
-    totalVolume: 13.4,
-    completedVolume: 13.4,
-    remaining: 0,
-    completionPercentage: "100%",
-  },
-  {
-    construct: "Стены",
-    layer: "Черновой",
-    finishType: "Р-1.В",
-    material: "Штукатурка",
-    unit: "м2",
-    totalVolume: 21.7,
-    completedVolume: 21.7,
-    remaining: 0,
-    completionPercentage: "100%",
-  },
-  {
-    construct: "Стены",
-    layer: "Черновой",
-    finishType: "Р-1.С",
-    material: "Штукатурка",
-    unit: "м2",
-    totalVolume: 1.8,
-    completedVolume: 1.8,
-    remaining: 0,
-    completionPercentage: "100%",
-  },
-  {
-    construct: "Стены",
-    layer: "Чистовой",
-    finishType: "С-4.С",
-    material: "Керамогранитная плитка",
-    unit: "м2",
-    totalVolume: 13.4,
-    completedVolume: 0,
-    remaining: 13.4,
-    completionPercentage: "0%",
-  },
-  {
-    construct: "Стены",
-    layer: "Чистовой",
-    finishType: "Р-1.В",
-    material: "Окраска",
-    unit: "м2",
-    totalVolume: 21.7,
-    completedVolume: 0,
-    remaining: 21.7,
-    completionPercentage: "0%",
-  },
-  {
-    construct: "Стены",
-    layer: "Чистовой",
-    finishType: "Р-1.С",
-    material: "Окраска",
-    unit: "м2",
-    totalVolume: 1.8,
-    completedVolume: 0,
-    remaining: 1.8,
-    completionPercentage: "0%",
-  },
-];
 // Функция для определения цвета фона строки
 const getRowBackgroundColor = (layer: string) => {
   return layer === "Черновой" ? "#f5f5f5" : "#ffffff"; // Светло-серый для "Черновой", белый для "Чистовой"
@@ -151,6 +28,101 @@ const getBackgroundColor = (percentage: string) => {
 export const RoomTable: React.FC = () => {
   const [allRooms, setAllRooms] = useState([]);
   const [room, setRoom] = React.useState("");
+  const nameRooms = allRooms.map((room) => room.name);
+
+  const roomData = allRooms.find((el) => el.name === room);
+
+  const planning_type_floor = roomData?.planning_type_floor
+    ?.map((el) => {
+      return [
+        {
+          construct: "Полы",
+          layer: "Черновой",
+          finishType: el.floor_type.type_code,
+          material: el.floor_type.rough_finish,
+          unit: "м2",
+          totalVolume: el.area_rough,
+          completedVolume: (roomData) =>
+            roomData.find(
+              (el) => el.floor_type.id === roomData.floor_volumes.id
+            ).rough_volume,
+          remaining: 5,
+          completionPercentage: "0%",
+        },
+        {
+          construct: "Полы",
+          layer: "Чистовой",
+          finishType: el.floor_type.type_code,
+          material: el.floor_type.clean_finish,
+          unit: "м2",
+          totalVolume: el.area_clean,
+          completedVolume: 0,
+          remaining: 5,
+          completionPercentage: "0%",
+        },
+      ];
+    })
+    .flat();
+  const planning_type_ceiling = roomData?.planning_type_ceiling
+    ?.map((el) => {
+      return [
+        {
+          construct: "Потолок",
+          layer: "Черновой",
+          finishType: el.ceiling_type.type_code,
+          material: el.ceiling_type.rough_finish,
+          unit: "м2",
+          totalVolume: el.area_rough,
+          completedVolume: 0,
+          remaining: 5,
+          completionPercentage: "0%",
+        },
+        {
+          construct: "Потолок",
+          layer: "Чистовой",
+          finishType: el.ceiling_type.type_code,
+          material: el.ceiling_type.clean_finish,
+          unit: "м2",
+          totalVolume: el.area_clean,
+          completedVolume: 0,
+          remaining: 5,
+          completionPercentage: "0%",
+        },
+      ];
+    })
+    .flat();
+  const planning_type_wall = roomData?.planning_type_wall
+    ?.map((el) => {
+      return [
+        {
+          construct: "Стены",
+          layer: "Черновой",
+          finishType: el.wall_type.type_code,
+          material: el.wall_type.rough_finish,
+          unit: "м2",
+          totalVolume: el.area_rough,
+          completedVolume: 0,
+          remaining: 5,
+          completionPercentage: "0%",
+        },
+        {
+          construct: "Стены",
+          layer: "Чистовой",
+          finishType: el.wall_type.type_code,
+          material: el.wall_type.clean_finish,
+          unit: "м2",
+          totalVolume: el.area_clean,
+          completedVolume: 0,
+          remaining: 5,
+          completionPercentage: "0%",
+        },
+      ];
+    })
+    .flat();
+  const rows = planning_type_floor
+    ? [...planning_type_floor, ...planning_type_ceiling, ...planning_type_wall]
+    : [];
+  console.log(rows);
 
   // Группируем строки по конструктиву и слою
   const groupedRows: { [key: string]: { [key: string]: typeof rows } } = {};
@@ -179,15 +151,10 @@ export const RoomTable: React.FC = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setRoom(event.target.value as string);
   };
-  console.log(allRooms);
-  const nameRooms = allRooms.map((room) => room.name);
-  console.log(room);
-
-  const roomData = allRooms.find((el) => el.name === room);
 
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell colSpan={9}>
