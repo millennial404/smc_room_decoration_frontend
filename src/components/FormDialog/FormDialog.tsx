@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
+  Box,
   FormControl,
   InputLabel,
   MenuItem,
@@ -19,6 +20,7 @@ export const FormDialog = () => {
   const [finishing, setFinishing] = React.useState("");
   const [type, setType] = React.useState("");
   const [volume, setVolume] = React.useState("");
+  const [constructive, setСonstructive] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,63 +41,72 @@ export const FormDialog = () => {
   const handleChangeVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(event.target.value);
   };
+  const handleChangeСonstructive = (event: SelectChangeEvent) => {
+    setСonstructive(event.target.value);
+  };
 
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen} sx={{ margin: 2 }}>
         Внести данные
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: "form",
-          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            handleClose();
-          },
-        }}
-      >
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Внесение данных по помещению $</DialogTitle>
         <DialogContent>
           <DialogContentText mb={3}>
             Форма для ввода данных по выполненому объёму
           </DialogContentText>
-          <FormControl fullWidth>
-            <InputLabel id="simple-select-label">Слой</InputLabel>
-            <Select
-              labelId="simple-select-label"
-              id="simple-select-layer"
-              value={finishing}
-              label="Слой"
-              onChange={handleChangeFinishing}
-            >
-              <MenuItem value={"Черновая"}>Черновая</MenuItem>
-              <MenuItem value={"Чистовая"}>Чистовая</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth sx={{ marginY: 3 }}>
-            <InputLabel id="simple-select-label">Тип отделки</InputLabel>
-            <Select
-              labelId="simple-select-label"
-              id="simple-select-type"
-              value={type}
-              label="Тип отделки"
-              onChange={handleChangeType}
-            >
-              <MenuItem value={"П1"}>П1</MenuItem>
-              <MenuItem value={"С2"}>С2</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <TextField
-              id="outlined-number"
-              value={volume}
-              label="Объём в м2"
-              type="number"
-              onChange={handleChangeVolume}
-            />
-          </FormControl>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <FormControl sx={{ marginY: 3 }}>
+              <InputLabel id="simple-select-label">Конструктив</InputLabel>
+              <Select
+                labelId="simple-select-label"
+                id="simple-select-layer"
+                value={constructive}
+                label="Конструктив"
+                onChange={handleChangeСonstructive}
+              >
+                <MenuItem value={"Черновая"}>Полы</MenuItem>
+                <MenuItem value={"Чистовая"}>Потолок</MenuItem>
+                <MenuItem value={"Чистовая"}>Стены</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl>
+              <InputLabel id="simple-select-label">Слой</InputLabel>
+              <Select
+                labelId="simple-select-label"
+                id="simple-select-layer"
+                value={finishing}
+                label="Слой"
+                onChange={handleChangeFinishing}
+              >
+                <MenuItem value={"Черновая"}>Черновая</MenuItem>
+                <MenuItem value={"Чистовая"}>Чистовая</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ marginY: 3 }}>
+              <InputLabel id="simple-select-label">Тип отделки</InputLabel>
+              <Select
+                labelId="simple-select-label"
+                id="simple-select-type"
+                value={type}
+                label="Тип отделки"
+                onChange={handleChangeType}
+              >
+                <MenuItem value={"П1"}>П1</MenuItem>
+                <MenuItem value={"С2"}>С2</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl>
+              <TextField
+                id="outlined-number"
+                value={volume}
+                label="Объём в м2"
+                type="number"
+                onChange={handleChangeVolume}
+              />
+            </FormControl>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Отмена</Button>
