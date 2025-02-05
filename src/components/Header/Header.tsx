@@ -1,4 +1,4 @@
-import { Box, Button, Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { FormDialog } from "../FormDialog";
 
 export const Header = () => {

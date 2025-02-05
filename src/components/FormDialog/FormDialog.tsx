@@ -20,6 +20,7 @@ export const FormDialog = () => {
   const [finishing, setFinishing] = React.useState("");
   const [type, setType] = React.useState("");
   const [volume, setVolume] = React.useState("");
+  const [volumePercent, setVolumePercent] = React.useState("");
   const [constructive, setСonstructive] = React.useState("");
 
   const handleClickOpen = () => {
@@ -38,8 +39,13 @@ export const FormDialog = () => {
     setType(event.target.value as string);
   };
 
-  const handleChangeVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeVolumeM2 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(event.target.value);
+  };
+  const handleChangeVolumePercent = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setVolumePercent(event.target.value);
   };
   const handleChangeСonstructive = (event: SelectChangeEvent) => {
     setСonstructive(event.target.value);
@@ -99,18 +105,37 @@ export const FormDialog = () => {
             </FormControl>
             <FormControl>
               <TextField
+                disabled={volumePercent !== ""}
                 id="outlined-number"
                 value={volume}
                 label="Объём в м2"
                 type="number"
-                onChange={handleChangeVolume}
+                onChange={handleChangeVolumeM2}
+              />
+            </FormControl>
+            <FormControl sx={{ marginY: 3 }}>
+              <TextField
+                disabled={volume !== ""}
+                id="outlined-number"
+                value={volumePercent}
+                label="Объём в %"
+                type="number"
+                onChange={handleChangeVolumePercent}
               />
             </FormControl>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Отмена</Button>
-          <Button type="submit">Отправить</Button>
+          <Button
+            type="submit"
+            onClick={() => {
+              console.log('Кнопка "Отправить" нажата');
+              handleClose();
+            }}
+          >
+            Отправить
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
