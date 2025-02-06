@@ -6,6 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { addVolume } from "../../api";
 import {
   Box,
   FormControl,
@@ -22,12 +23,30 @@ export const FormDialog = () => {
   const [volume, setVolume] = React.useState("");
   const [volumePercent, setVolumePercent] = React.useState("");
   const [constructive, setСonstructive] = React.useState("");
-
+  const volumeData = constructive
+    ? {
+        [constructive]: [
+          {
+            ...(type && { [constructive.split("_")[0] + "_type"]: type }),
+            ...(volume && { [finishing + "_volume"]: volume }),
+            ...(volumePercent && {
+              [finishing + "_completion_percentage"]: volumePercent,
+            }),
+          },
+        ],
+      }
+    : {};
+  console.log(volumeData);
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setFinishing("");
+    setType("");
+    setVolume("");
+    setVolumePercent("");
+    setСonstructive("");
     setOpen(false);
   };
 
@@ -72,9 +91,9 @@ export const FormDialog = () => {
                 label="Конструктив"
                 onChange={handleChangeСonstructive}
               >
-                <MenuItem value={"Черновая"}>Полы</MenuItem>
-                <MenuItem value={"Чистовая"}>Потолок</MenuItem>
-                <MenuItem value={"Чистовая"}>Стены</MenuItem>
+                <MenuItem value={"floor_volumes"}>Полы</MenuItem>
+                <MenuItem value={"ceiling_volumes"}>Потолок</MenuItem>
+                <MenuItem value={"wall_volumes"}>Стены</MenuItem>
               </Select>
             </FormControl>
             <FormControl>
@@ -86,8 +105,8 @@ export const FormDialog = () => {
                 label="Слой"
                 onChange={handleChangeFinishing}
               >
-                <MenuItem value={"Черновая"}>Черновая</MenuItem>
-                <MenuItem value={"Чистовая"}>Чистовая</MenuItem>
+                <MenuItem value={"rough"}>Черновая</MenuItem>
+                <MenuItem value={"clean"}>Чистовая</MenuItem>
               </Select>
             </FormControl>
             <FormControl sx={{ marginY: 3 }}>
@@ -105,6 +124,10 @@ export const FormDialog = () => {
             </FormControl>
             <FormControl>
               <TextField
+                error={Number(volume) < 0}
+                helperText={
+                  Number(volume) < 0 ? "Значение не может быть меньше 0" : ""
+                }
                 disabled={volumePercent !== ""}
                 id="outlined-number"
                 value={volume}
@@ -115,6 +138,12 @@ export const FormDialog = () => {
             </FormControl>
             <FormControl sx={{ marginY: 3 }}>
               <TextField
+                error={Number(volumePercent) < 0}
+                helperText={
+                  Number(volumePercent) < 0
+                    ? "Значение не может быть меньше 0"
+                    : ""
+                }
                 disabled={volume !== ""}
                 id="outlined-number"
                 value={volumePercent}
@@ -128,8 +157,16 @@ export const FormDialog = () => {
         <DialogActions>
           <Button onClick={handleClose}>Отмена</Button>
           <Button
+            disabled={
+              constructive === "" ||
+              finishing === "" ||
+              type === "" ||
+              ((volume === "" || Number(volume) < 0) &&
+                (volumePercent === "" || Number(volumePercent) < 0))
+            }
             type="submit"
             onClick={() => {
+              addVolume(volumeData, 1);
               console.log('Кнопка "Отправить" нажата');
               handleClose();
             }}
