@@ -182,7 +182,7 @@ export const RoomTable: React.FC = () => {
     <TableContainer
       elevation={3}
       component={Paper}
-      sx={{ width: 1200, margin: "auto" }}
+      sx={{ maxWidth: 1200, margin: "auto" }}
     >
       <Table size="small">
         <TableHead>

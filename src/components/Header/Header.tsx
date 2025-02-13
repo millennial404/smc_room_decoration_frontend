@@ -7,7 +7,7 @@ export const Header = () => {
       elevation={3}
       component={Paper}
       sx={{
-        width: 1200,
+        maxWidth: 1200,
         height: 100,
         marginX: "auto",
         marginY: 5,
