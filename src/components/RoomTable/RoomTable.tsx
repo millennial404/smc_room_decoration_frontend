@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getAllRooms } from "../../api";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -18,6 +17,8 @@ import {
   tooltipClasses,
   styled,
 } from "@mui/material";
+import { useDispatch, useSelector, useStore } from "react-redux";
+import { fetchRooms } from "../../store/roomsSlice";
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -39,9 +40,10 @@ const getBackgroundColor = (percentage: string) => {
 };
 
 export const RoomTable: React.FC = () => {
-  const [allRooms, setAllRooms] = useState([]);
+  const allRooms = useSelector((state) => state.rooms.rooms);
   const [room, setRoom] = React.useState("");
   const nameRooms = allRooms.map((room) => room.name);
+  const dispatch = useDispatch();
 
   const roomData = allRooms.find((el) => el.name === room);
 
@@ -163,15 +165,7 @@ export const RoomTable: React.FC = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllRooms();
-        setAllRooms(data);
-      } catch (error) {
-        console.error("Ошибка при получении данных:", error);
-      }
-    };
-    fetchData();
+    dispatch(fetchRooms());
   }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
