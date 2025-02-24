@@ -1,7 +1,13 @@
-import { Box, Paper } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 import { FormDialog } from "../FormDialog";
+import { setPopup } from "../../store/popupSlice";
+import { useDispatch } from "react-redux";
 
 export const Header = () => {
+  const dispatch = useDispatch();
+  const handleClickOpen = () => {
+    dispatch(setPopup(true));
+  };
   return (
     <Box
       elevation={3}
@@ -15,6 +21,9 @@ export const Header = () => {
         alignItems: "center",
       }}
     >
+      <Button variant="outlined" onClick={handleClickOpen} sx={{ margin: 2 }}>
+        Внести данные
+      </Button>
       <FormDialog />
     </Box>
   );
