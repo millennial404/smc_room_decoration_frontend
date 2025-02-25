@@ -17,6 +17,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { setPopup } from "../../store/popupSlice";
+import { fetchRooms } from "../../store/roomsSlice";
 
 export const FormDialog = () => {
   const dispatch = useDispatch();
@@ -192,7 +193,9 @@ export const FormDialog = () => {
             }
             type="submit"
             onClick={() => {
-              addVolume(volumeData, currentRoom.id);
+              addVolume(volumeData, currentRoom.id)
+                .then(() => dispatch(fetchRooms()))
+                .catch((error) => alert(error.message));
               console.log('Кнопка "Отправить" нажата');
               handleClose();
             }}
