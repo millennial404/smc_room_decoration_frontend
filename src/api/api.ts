@@ -1,11 +1,11 @@
 export const getAllRooms = async () => {
-  const res = await fetch(" http://127.0.0.1:8000/api/rooms/");
+  const res = await fetch(" http://87.242.85.9:8000/api/rooms/");
   return await res.json();
 };
 
 export const addVolume = async (body: object, id: number) => {
   const res = await fetch(
-    `http://127.0.0.1:8000/api/rooms/${id}/add-volumes/`,
+    `http://87.242.85.9:8000/api/rooms/${id}/add-volumes/`,
     {
       method: "POST",
       mode: "cors",
