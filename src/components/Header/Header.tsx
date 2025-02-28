@@ -1,8 +1,11 @@
 import { Box, Button, Paper } from "@mui/material";
-import { FormDialog } from "../FormDialog";
 import { setPopup } from "../../store/popupSlice";
 import { useDispatch } from "react-redux";
-import { getDownloadCSV_Actual, getDownloadCSV_Summary } from "../../api";
+import {
+  getDownloadCSV_Actual,
+  getDownloadCSV_All,
+  getDownloadCSV_Summary,
+} from "../../api";
 import { logout } from "../../store/userSlice";
 
 export const Header = () => {
@@ -32,16 +35,24 @@ export const Header = () => {
         onClick={() => getDownloadCSV_Actual()}
         sx={{ margin: 2 }}
       >
-        Фактическая информация
+        Последние изменения
       </Button>
       <Button
         variant="outlined"
         onClick={() => getDownloadCSV_Summary()}
         sx={{ margin: 2 }}
       >
-        Сводная таблица
+        Сводные данные
       </Button>
-      <FormDialog />
+      <Button
+        variant="outlined"
+        onClick={() => {
+          getDownloadCSV_All();
+        }}
+        sx={{ margin: 2 }}
+      >
+        Фактические данные
+      </Button>
       <Button
         variant="outlined"
         onClick={() => {
@@ -51,7 +62,6 @@ export const Header = () => {
       >
         Выйти
       </Button>
-      <FormDialog />
     </Box>
   );
 };

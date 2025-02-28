@@ -82,6 +82,25 @@ export const getDownloadCSV_Summary = () => {
     });
 };
 
+export const getDownloadCSV_All = () => {
+  return fetch(`${BASE_URL}/api/rooms/download-all-volumes-csv/`, {
+    method: "GET",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+  })
+    .then((res) => res.blob())
+    .then((blob) => {
+      const file = window.URL.createObjectURL(blob);
+      window.location.assign(file);
+    });
+};
+
 export const fetchWithRefresh = async (endpoint, options) => {
   try {
     return await request(endpoint, options); //делаем запрос
