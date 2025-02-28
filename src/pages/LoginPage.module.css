@@ -1,0 +1,16 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.checkPass :global .MuiFormControlLabel-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.link {
+  text-decoration: none;
+  color: #696cff;
+}

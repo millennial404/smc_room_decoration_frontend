@@ -175,6 +175,8 @@ export const RoomTable: React.FC = () => {
     }
   }, [room, roomData, dispatch]);
 
+  const currentRoom = useSelector((state) => state.currentRoom.currentRoom);
+
   const handleChange = (event: SelectChangeEvent) => {
     setRoom(event.target.value as string);
   };
@@ -210,7 +212,7 @@ export const RoomTable: React.FC = () => {
                 >
                   {nameRooms.map((nameRoom, i) => (
                     <MenuItem key={i} value={nameRoom}>
-                      {nameRoom}
+                      {nameRoom} {currentRoom.code}
                     </MenuItem>
                   ))}
                 </Select>
