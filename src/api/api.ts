@@ -1,6 +1,6 @@
 import { decodeToken } from "react-jwt";
 
-const BASE_URL = "87.242.85.9:8000";
+const BASE_URL = "http://87.242.85.9:8000";
 
 const checkResponse = (res) => {
   return res.status === 204
