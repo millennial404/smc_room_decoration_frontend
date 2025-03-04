@@ -3,7 +3,7 @@ import { setPopup } from "../../store/popupSlice";
 import { useDispatch } from "react-redux";
 import {
   getDownloadCSV_Actual,
-  getDownloadCSV_All,
+  // getDownloadCSV_All,
   getDownloadCSV_Summary,
 } from "../../api";
 import { logout } from "../../store/userSlice";
@@ -35,16 +35,16 @@ export const Header = () => {
         onClick={() => getDownloadCSV_Actual()}
         sx={{ margin: 2 }}
       >
-        Последние изменения
+        Текущие данные
       </Button>
       <Button
         variant="outlined"
         onClick={() => getDownloadCSV_Summary()}
         sx={{ margin: 2 }}
       >
-        Сводные данные
+        История изменений
       </Button>
-      <Button
+      {/* <Button
         variant="outlined"
         onClick={() => {
           getDownloadCSV_All();
@@ -52,7 +52,7 @@ export const Header = () => {
         sx={{ margin: 2 }}
       >
         Фактические данные
-      </Button>
+      </Button> */}
       <Button
         variant="outlined"
         onClick={() => {

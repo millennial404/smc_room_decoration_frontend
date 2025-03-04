@@ -6,7 +6,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useDispatch, useSelector } from "react-redux";
 import { addVolume } from "../../api";
 import {
   Box,
@@ -18,11 +17,12 @@ import {
 } from "@mui/material";
 import { setPopup } from "../../store/popupSlice";
 import { fetchRooms } from "../../store/roomsSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 export const FormDialog = () => {
-  const dispatch = useDispatch();
-  const open = useSelector((state) => state.popup.popup);
-  const currentRoom = useSelector((state) => state.currentRoom.currentRoom);
+  const dispatch = useAppDispatch();
+  const open = useAppSelector((state) => state.popup.popup);
+  const currentRoom = useAppSelector((state) => state.currentRoom.currentRoom);
 
   const [finishing, setFinishing] = React.useState("");
   const [type, setType] = React.useState("");
@@ -45,8 +45,6 @@ export const FormDialog = () => {
         ],
       }
     : {};
-  console.log(volumeData);
-  console.log(currentRoom.planning_type_floor);
   const handleClose = () => {
     setFinishing("");
     setType("");
